@@ -548,6 +548,16 @@ class BaseContext(tengine.Context):
         for token in _valid_tokens:
             transform[token] = lambda spec, string: str.upper(string)
 
+        # HACK: fix Intel PS1 issues
+        new_env_modifications = []
+        for mod in env:
+            if type(mod) is spack.util.environment.UnsetEnv and mod.name == 'PS1':
+                continue
+            else:
+                new_env_modifications.append(mod)
+
+        env.env_modifications = new_env_modifications
+
         for x in env:
             # Ensure all the tokens are valid in this context
             msg = 'some tokens cannot be expanded in an environment variable name'  # noqa: E501
