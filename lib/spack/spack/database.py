@@ -201,9 +201,14 @@ class ForbiddenLockError(SpackError):
 
 
 class ForbiddenLock(object):
-    def __getattribute__(self, name):
-        raise ForbiddenLockError(
-            "Cannot access attribute '{0}' of lock".format(name))
+    """Dummy read lock for upstream spack tree. Raises an exception
+    if write lock is requested."""
+    def acquire_read(self, timeout=None):
+        return True
+    def release_read(self):
+        return True
+    def acquire_write(self, timeout=None):
+        raise ForbiddenLockError("Tried to acquire write lock on upstream")
 
 
 _query_docstring = """
