@@ -14,6 +14,7 @@ class Jansson(CMakePackage):
     url      = "https://github.com/akheron/jansson/archive/v2.9.tar.gz"
     maintainers = ['ax3l']
 
+    version('2.10',   sha256='b0a899f90ade82e42da0ecabc8af1fa296d69691e7c0786c4994fb79d4833ebb')
     version('2.9', 'd2db25c437b359fc5a065ed938962237')
 
     variant('shared', default=True,

@@ -4,7 +4,8 @@
 # SPDX-License-Identifier: (Apache-2.0 OR MIT)
 
 from spack import *
-
+import glob
+import sys
 
 class Binutils(AutotoolsPackage):
     """GNU binutils, which contain the linker, assembler, objdump and others"""
@@ -12,6 +13,7 @@ class Binutils(AutotoolsPackage):
     homepage = "http://www.gnu.org/software/binutils/"
     url      = "https://ftpmirror.gnu.org/binutils/binutils-2.28.tar.bz2"
 
+    version('2.33.1', sha256='0cb4843da15a65a953907c96bad658283f3c4419d6bcc56bf2789db16306adb2')
     version('2.31.1', 'ffcc382695bf947da6135e7436b8ed52d991cf270db897190f19d6f9838564d0')
     version('2.29.1', '9af59a2ca3488823e453bb356fe0f113')
     version('2.28', '9e8340c96626b469a603c15c9d843727')
@@ -28,6 +30,7 @@ class Binutils(AutotoolsPackage):
     variant('gold', default=True, description="build the gold linker")
     variant('libiberty', default=False, description='Also install libiberty.')
     variant('nls', default=True, description='Enable Native Language Support')
+    variant('headers', default=False, description='Install extra headers (e.g. ELF)')
 
     patch('cr16.patch', when='@:2.29.1')
     patch('update_symbol-2.26.patch', when='@2.26')
@@ -65,6 +68,7 @@ class Binutils(AutotoolsPackage):
 
         if '+nls' in spec:
             configure_args.append('--enable-nls')
+            configure_args.append('LDFLAGS=-lintl')
         else:
             configure_args.append('--disable-nls')
 
@@ -75,3 +79,17 @@ class Binutils(AutotoolsPackage):
             configure_args.append('--program-prefix=g')
 
         return configure_args
+
+    @run_after('install')
+    def install_headers(self):
+        # some packages (like TAU) need the ELF headers, so install them
+        # as a subdirectory in include/extras
+        if '+headers' in self.spec:
+            extradir = join_path(self.prefix.include, 'extra')
+            mkdirp(extradir)
+            # grab the full binutils set of headers
+            install_tree('include', extradir)
+            # also grab the headers from the bfd directory
+            for current_file in glob.glob(join_path(self.build_directory,
+                                                    'bfd', '*.h')):
+                install(current_file, extradir)

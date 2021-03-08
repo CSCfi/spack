@@ -13,6 +13,9 @@ class Libsodium(AutotoolsPackage):
     url      = "https://download.libsodium.org/libsodium/releases/libsodium-1.0.13.tar.gz"
     list_url = "https://download.libsodium.org/libsodium/releases/old"
 
+    version('1.0.18', sha256='6f504490b342a4f8a4c4a02fc9b866cbef8622d5df4e5452b46be121e46636c1')
+    version('1.0.17', sha256='dd10fcd8788183e396b265f63f93beeab1b6c7006545df8538fdf15930a36609')
+    version('1.0.16', sha256='eeadc7e1e1bcef09680fb4837d448fbdf57224978f865ac1c16745868fbd0533')                
     version('1.0.15', '070373e73a0b10bd96f412e1732ebc42')
     version('1.0.13', 'f38aac160a4bd05f06f743863e54e499')
     version('1.0.12', 'c308e3faa724b630b86cc0aaf887a5d4')
@@ -26,8 +29,8 @@ class Libsodium(AutotoolsPackage):
 
     def url_for_version(self, version):
         url = 'https://download.libsodium.org/libsodium/releases/'
-        if version < Version('1.0.4'):
+        if version < Version('1.0.15'):
             url += 'old/unsupported/'
-        elif version < Version('1.0.12'):
+        elif version < Version('1.0.17'):
             url += 'old/'
         return url + 'libsodium-{0}.tar.gz'.format(version)

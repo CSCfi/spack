@@ -17,6 +17,8 @@ class ImageMagick(AutotoolsPackage):
     version('7.0.2-7', 'c59cdc8df50e481b2bd1afe09ac24c08')
     version('7.0.2-6', 'aa5689129c39a5146a3212bf5f26d478')
 
+    variant('openjpeg', default=False, description="Build with openjpeg support")
+    
     depends_on('jpeg')
     depends_on('pango')
     depends_on('libtool', type='build')
@@ -27,9 +29,15 @@ class ImageMagick(AutotoolsPackage):
     depends_on('ghostscript')
     depends_on('ghostscript-fonts')
 
+    depends_on('openjpeg', when='+openjpeg')
+    
     def configure_args(self):
         spec = self.spec
+        args = []
+
+        if '+openjpeg' in spec:
+            args.append('--with-openjpeg={}'.format(spec['openjpeg'].prefix))
+
         gs_font_dir = join_path(spec['ghostscript-fonts'].prefix.share, "font")
-        return [
-            '--with-gs-font-dir={0}'.format(gs_font_dir)
-        ]
+        args.append('--with-gs-font-dir={0}'.format(gs_font_dir))
+        return args

@@ -19,6 +19,9 @@ class Mpip(AutotoolsPackage):
     depends_on('libunwind', when=os.uname()[4] == "x86_64")
     depends_on("mpi")
 
+    def setup_environment(self, spack_env, run_env):
+        run_env.prepend_path('LD_LIBRARY_PATH', self.spec['libunwind'].prefix.lib)
+        
     def configure_args(self):
         config_args = ['--without-f77']
         config_args.append("--with-cc=%s" % self.spec['mpi'].mpicc)

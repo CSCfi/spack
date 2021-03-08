@@ -13,6 +13,7 @@ class Pigz(MakefilePackage):
     homepage = "http://zlib.net/pigz/"
     url      = "https://github.com/madler/pigz/archive/v2.3.4.tar.gz"
 
+    version('2.5', sha256='13b9945999c0b20052f320943302f3160e2639bcc362e5e4182b198ea0e88b0a')
     version('2.4', '3c8a601db141d3013ef9fe5f2daaf73f')
     version('2.3.4', 'c109057050b15edf3eb9bb4d0805235e')
 
