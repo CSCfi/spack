@@ -21,6 +21,7 @@ class PySix(PythonPackage):
     version('1.8.0',  sha256='047bbbba41bac37c444c75ddfdf0573dd6e2f1fbd824e6247bb26fa7d8fa3830')
 
     extends('python', ignore=r'bin/pytest')
+    depends_on('python', type=('build', 'run'))
 
     # Newer versions of setuptools require six. Although setuptools is an
     # optional dependency of six, if it is not found, setup.py will fallback
