@@ -13,6 +13,7 @@ class Nco(AutotoolsPackage):
     homepage = "http://nco.sourceforge.net/"
     url      = "https://github.com/nco/nco/archive/4.6.7.tar.gz"
 
+    version('4.9.3', sha256='eade5b79f3814b11ae3f52c34159567e76a73f05f0ab141eccaac68f0ca94aee')
     version('4.7.9', sha256='048f6298bceb40913c3ae433f875dea1e9129b1c86019128e7271d08f274a879')
     version('4.6.7', sha256='2fe2dabf14a60bface694307cbe719df57103682b715348e9d77bfe8d31487f3')
     version('4.6.6', sha256='079d83f800b73d9b12b8de1634a88c2cbe40a639aaf7bc056cd2e836c6047697')
