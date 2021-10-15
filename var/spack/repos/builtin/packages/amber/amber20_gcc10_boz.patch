@@ -1,0 +1,557 @@
+diff --git a/src/pmemd/src/nfe_bbmd.F90 b/src/pmemd/src/nfe_bbmd.F90
+--- a/src/pmemd/src/nfe_bbmd.F90
++++ b/src/pmemd/src/nfe_bbmd.F90
+@@ -2367,11 +2367,7 @@ end subroutine ctxt_open_units
+
+     integer( kind = wi )  :: i, mult_a
+
+-#ifndef ASSUME_GFORTRAN
+     data mult_a /z'6C078965'/ ! gfortran does not like this
+-#else
+-    mult_a = ieor(ishft(z'6C07', 16), z'8965') ! but this is okay
+-#endif /* ASSUME_GFORTRAN */
+
+     self%mtinit = .true._wi
+     self%mt(1) = ibits( s, 0, 32 )
+@@ -2408,14 +2404,8 @@ end subroutine ctxt_open_units
+     data seed_d /z'12BD6AA'/
+     data mult_a /z'19660D'/
+
+-#ifndef ASSUME_GFORTRAN
+     data mult_b /z'5D588B65'/
+     data msb1_d /z'80000000'/
+-#else
+-    mult_b = ieor(ishft(z'5D58', 16), z'8B65')
+-    msb1_d = 1
+-    msb1_d = ishft(msb1_d, 31)
+-#endif /* ASSUME_GFORTRAN */
+
+     key_length = size( init_key, dim = 1 )
+     call init_by_seed(self, seed_d)
+diff --git a/src/pmemd/src/pack_nb_list_dflt.i b/src/pmemd/src/pack_nb_list_dflt.i
+--- a/src/pmemd/src/pack_nb_list_dflt.i
++++ b/src/pmemd/src/pack_nb_list_dflt.i
+@@ -118,7 +118,7 @@ subroutine pack_nb_list_skip_belly_pairs(ee_eval_cnt, img_j_ee_eval, &
+   integer               :: img_j
+   integer               :: new_ee_eval_cnt
+   integer               :: new_full_eval_cnt
+-  integer, parameter    :: mask27 = Z"07FFFFFF"
++  integer, parameter    :: mask27 = int(Z"07FFFFFF")
+
+
+   if (igroup(atm_i) .eq. 0) then
+@@ -289,7 +289,7 @@ subroutine pack_nb_list_skip_ti_pairs(ee_eval_cnt, img_j_ee_eval, &
+   ! For TI:
+   integer               :: cur_nb_list
+   integer               :: sc_lcl_sum
+-  integer, parameter    :: mask27 = Z"07FFFFFF"
++  integer, parameter    :: mask27 = int(Z"07FFFFFF")
+
+   ti_ee_eval_cnt(:) = 0
+   ti_full_eval_cnt(:) = 0
+diff --git a/src/pmemd/src/pairs_calc.i b/src/pmemd/src/pairs_calc.i
+--- a/src/pmemd/src/pairs_calc.i
++++ b/src/pmemd/src/pairs_calc.i
+@@ -240,7 +240,7 @@ subroutine pairs_calc_f(img_frc, img_crd, img_qterm, f_tbl, eed_cub, &
+
+ ! Local variables:
+
+-  integer, parameter            :: mask27 = Z"07FFFFFF"
++  integer, parameter            :: mask27 = int(Z"07FFFFFF")
+ #ifndef MIC2
+   double precision, parameter   :: half = 1.d0/2.d0
+   double precision, parameter   :: third = 1.d0/3.d0
+diff --git a/src/pmemd/src/pairs_calc_ips.i b/src/pmemd/src/pairs_calc_ips.i
+--- a/src/pmemd/src/pairs_calc_ips.i
++++ b/src/pmemd/src/pairs_calc_ips.i
+@@ -106,7 +106,7 @@ subroutine pairs_calc_f(img_frc, img_crd, img_qterm, f_tbl, eed_cub, &
+
+ ! Local variables:
+
+-  integer, parameter            :: mask27 = Z"07FFFFFF"
++  integer, parameter            :: mask27 = int(Z"07FFFFFF")
+   double precision, parameter   :: half = 1.d0/2.d0
+   double precision, parameter   :: third = 1.d0/3.d0
+
+diff --git a/src/pmemd/src/pairs_calc_lj1264.i b/src/pmemd/src/pairs_calc_lj1264.i
+--- a/src/pmemd/src/pairs_calc_lj1264.i
++++ b/src/pmemd/src/pairs_calc_lj1264.i
+@@ -53,7 +53,7 @@ subroutine pairs_calc_f(img_frc, img_crd, img_qterm, f_tbl, eed_cub, &
+
+ ! Local variables:
+
+-  integer, parameter            :: mask27 = Z"07FFFFFF"
++  integer, parameter            :: mask27 = int(Z"07FFFFFF")
+   double precision, parameter   :: half = 1.d0/2.d0
+   double precision, parameter   :: third = 1.d0/3.d0
+
+diff --git a/src/pmemd/src/pairs_calc_midpoint.i b/src/pmemd/src/pairs_calc_midpoint.i
+--- a/src/pmemd/src/pairs_calc_midpoint.i
++++ b/src/pmemd/src/pairs_calc_midpoint.i
+@@ -162,7 +162,7 @@ subroutine pairs_calc_midpoint_f(img_frc, img_crd, img_qterm, f_tbl, eed_cub, &
+
+ ! Local variables:
+
+-  integer, parameter            :: mask27 = Z"07FFFFFF"
++  integer, parameter            :: mask27 = int(Z"07FFFFFF")
+   double precision      :: dumx, dumy, dumz
+ #ifndef pmemd_SPDP
+   double precision, parameter   :: half = 1.d0/2.d0
+diff --git a/src/pmemd/src/pairs_calc_offload.i b/src/pmemd/src/pairs_calc_offload.i
+--- a/src/pmemd/src/pairs_calc_offload.i
++++ b/src/pmemd/src/pairs_calc_offload.i
+@@ -124,7 +124,7 @@ subroutine pairs_calc_f_offload(img_frc, img_crd, img_qterm, f_tbl, eed_cub, &
+ /* done passing */
+ ! Local variables:
+
+-  integer, parameter            :: mask27 = Z"07FFFFFF"
++  integer, parameter            :: mask27 = int(Z"07FFFFFF")
+   double precision, parameter   :: half = 1.d0/2.d0
+   double precision, parameter   :: third = 1.d0/3.d0
+
+diff --git a/src/pmemd/src/pairs_calc_ti_AUTO.i b/src/pmemd/src/pairs_calc_ti_AUTO.i
+--- a/src/pmemd/src/pairs_calc_ti_AUTO.i
++++ b/src/pmemd/src/pairs_calc_ti_AUTO.i
+@@ -19,7 +19,7 @@ eed_cub, ico, ipairs_sublst, img_iac, cn1, cn2, x_tran)
+
+ ! Local variables:
+
+-  integer, parameter            :: mask27 = Z"07FFFFFF"
++  integer, parameter            :: mask27 = int(Z"07FFFFFF")
+   double precision, parameter   :: half = 1.d0/2.d0
+   double precision, parameter   :: third = 1.d0/3.d0
+
+@@ -307,7 +307,7 @@ eed_cub, ico, ipairs_sublst, img_iac, cn1, cn2, x_tran)
+
+ ! Local variables:
+
+-  integer, parameter            :: mask27 = Z"07FFFFFF"
++  integer, parameter            :: mask27 = int(Z"07FFFFFF")
+   double precision, parameter   :: half = 1.d0/2.d0
+   double precision, parameter   :: third = 1.d0/3.d0
+
+@@ -580,7 +580,7 @@ eed_cub, ico, ipairs_sublst, img_iac, cn1, cn2, x_tran)
+
+ ! Local variables:
+
+-  integer, parameter            :: mask27 = Z"07FFFFFF"
++  integer, parameter            :: mask27 = int(Z"07FFFFFF")
+   double precision, parameter   :: half = 1.d0/2.d0
+   double precision, parameter   :: third = 1.d0/3.d0
+
+@@ -849,7 +849,7 @@ eed_cub, ico, ipairs_sublst, img_iac, cn1, cn2, x_tran)
+
+ ! Local variables:
+
+-  integer, parameter            :: mask27 = Z"07FFFFFF"
++  integer, parameter            :: mask27 = int(Z"07FFFFFF")
+   double precision, parameter   :: half = 1.d0/2.d0
+   double precision, parameter   :: third = 1.d0/3.d0
+
+@@ -1102,7 +1102,7 @@ eed_cub, ico, ipairs_sublst, img_iac, cn1, cn2, x_tran)
+
+ ! Local variables:
+
+-  integer, parameter            :: mask27 = Z"07FFFFFF"
++  integer, parameter            :: mask27 = int(Z"07FFFFFF")
+   double precision, parameter   :: half = 1.d0/2.d0
+   double precision, parameter   :: third = 1.d0/3.d0
+
+@@ -1396,7 +1396,7 @@ eed_cub, ico, ipairs_sublst, img_iac, cn1, cn2, x_tran)
+
+ ! Local variables:
+
+-  integer, parameter            :: mask27 = Z"07FFFFFF"
++  integer, parameter            :: mask27 = int(Z"07FFFFFF")
+   double precision, parameter   :: half = 1.d0/2.d0
+   double precision, parameter   :: third = 1.d0/3.d0
+
+@@ -1675,7 +1675,7 @@ eed_cub, ico, ipairs_sublst, img_iac, cn1, cn2, x_tran)
+
+ ! Local variables:
+
+-  integer, parameter            :: mask27 = Z"07FFFFFF"
++  integer, parameter            :: mask27 = int(Z"07FFFFFF")
+   double precision, parameter   :: half = 1.d0/2.d0
+   double precision, parameter   :: third = 1.d0/3.d0
+
+@@ -1950,7 +1950,7 @@ eed_cub, ico, ipairs_sublst, img_iac, cn1, cn2, x_tran)
+
+ ! Local variables:
+
+-  integer, parameter            :: mask27 = Z"07FFFFFF"
++  integer, parameter            :: mask27 = int(Z"07FFFFFF")
+   double precision, parameter   :: half = 1.d0/2.d0
+   double precision, parameter   :: third = 1.d0/3.d0
+
+@@ -2209,7 +2209,7 @@ eed_cub, ico, ipairs_sublst, img_iac, cn1, cn2, x_tran)
+
+ ! Local variables:
+
+-  integer, parameter            :: mask27 = Z"07FFFFFF"
++  integer, parameter            :: mask27 = int(Z"07FFFFFF")
+   double precision, parameter   :: half = 1.d0/2.d0
+   double precision, parameter   :: third = 1.d0/3.d0
+
+@@ -2497,7 +2497,7 @@ eed_cub, ico, ipairs_sublst, img_iac, cn1, cn2, x_tran)
+
+ ! Local variables:
+
+-  integer, parameter            :: mask27 = Z"07FFFFFF"
++  integer, parameter            :: mask27 = int(Z"07FFFFFF")
+   double precision, parameter   :: half = 1.d0/2.d0
+   double precision, parameter   :: third = 1.d0/3.d0
+
+@@ -2770,7 +2770,7 @@ eed_cub, ico, ipairs_sublst, img_iac, cn1, cn2, x_tran)
+
+ ! Local variables:
+
+-  integer, parameter            :: mask27 = Z"07FFFFFF"
++  integer, parameter            :: mask27 = int(Z"07FFFFFF")
+   double precision, parameter   :: half = 1.d0/2.d0
+   double precision, parameter   :: third = 1.d0/3.d0
+
+@@ -3039,7 +3039,7 @@ eed_cub, ico, ipairs_sublst, img_iac, cn1, cn2, x_tran)
+
+ ! Local variables:
+
+-  integer, parameter            :: mask27 = Z"07FFFFFF"
++  integer, parameter            :: mask27 = int(Z"07FFFFFF")
+   double precision, parameter   :: half = 1.d0/2.d0
+   double precision, parameter   :: third = 1.d0/3.d0
+
+@@ -3292,7 +3292,7 @@ eed_cub, ico, ipairs_sublst, img_iac, cn1, cn2, x_tran)
+
+ ! Local variables:
+
+-  integer, parameter            :: mask27 = Z"07FFFFFF"
++  integer, parameter            :: mask27 = int(Z"07FFFFFF")
+   double precision, parameter   :: half = 1.d0/2.d0
+   double precision, parameter   :: third = 1.d0/3.d0
+
+@@ -3586,7 +3586,7 @@ eed_cub, ico, ipairs_sublst, img_iac, cn1, cn2, x_tran)
+
+ ! Local variables:
+
+-  integer, parameter            :: mask27 = Z"07FFFFFF"
++  integer, parameter            :: mask27 = int(Z"07FFFFFF")
+   double precision, parameter   :: half = 1.d0/2.d0
+   double precision, parameter   :: third = 1.d0/3.d0
+
+@@ -3865,7 +3865,7 @@ eed_cub, ico, ipairs_sublst, img_iac, cn1, cn2, x_tran)
+
+ ! Local variables:
+
+-  integer, parameter            :: mask27 = Z"07FFFFFF"
++  integer, parameter            :: mask27 = int(Z"07FFFFFF")
+   double precision, parameter   :: half = 1.d0/2.d0
+   double precision, parameter   :: third = 1.d0/3.d0
+
+@@ -4140,7 +4140,7 @@ eed_cub, ico, ipairs_sublst, img_iac, cn1, cn2, x_tran)
+
+ ! Local variables:
+
+-  integer, parameter            :: mask27 = Z"07FFFFFF"
++  integer, parameter            :: mask27 = int(Z"07FFFFFF")
+   double precision, parameter   :: half = 1.d0/2.d0
+   double precision, parameter   :: third = 1.d0/3.d0
+
+@@ -4399,7 +4399,7 @@ eed_cub, ico, ipairs_sublst, img_iac, cn1, cn2, x_tran)
+
+ ! Local variables:
+
+-  integer, parameter            :: mask27 = Z"07FFFFFF"
++  integer, parameter            :: mask27 = int(Z"07FFFFFF")
+   double precision, parameter   :: half = 1.d0/2.d0
+   double precision, parameter   :: third = 1.d0/3.d0
+
+@@ -4747,7 +4747,7 @@ eed_cub, ico, ipairs_sublst, img_iac, cn1, cn2, x_tran)
+
+ ! Local variables:
+
+-  integer, parameter            :: mask27 = Z"07FFFFFF"
++  integer, parameter            :: mask27 = int(Z"07FFFFFF")
+   double precision, parameter   :: half = 1.d0/2.d0
+   double precision, parameter   :: third = 1.d0/3.d0
+
+@@ -5061,7 +5061,7 @@ eed_cub, ico, ipairs_sublst, img_iac, cn1, cn2, x_tran)
+
+ ! Local variables:
+
+-  integer, parameter            :: mask27 = Z"07FFFFFF"
++  integer, parameter            :: mask27 = int(Z"07FFFFFF")
+   double precision, parameter   :: half = 1.d0/2.d0
+   double precision, parameter   :: third = 1.d0/3.d0
+
+@@ -5356,7 +5356,7 @@ eed_cub, ico, ipairs_sublst, img_iac, cn1, cn2, x_tran)
+
+ ! Local variables:
+
+-  integer, parameter            :: mask27 = Z"07FFFFFF"
++  integer, parameter            :: mask27 = int(Z"07FFFFFF")
+   double precision, parameter   :: half = 1.d0/2.d0
+   double precision, parameter   :: third = 1.d0/3.d0
+
+@@ -5635,7 +5635,7 @@ eed_cub, ico, ipairs_sublst, img_iac, cn1, cn2, x_tran)
+
+ ! Local variables:
+
+-  integer, parameter            :: mask27 = Z"07FFFFFF"
++  integer, parameter            :: mask27 = int(Z"07FFFFFF")
+   double precision, parameter   :: half = 1.d0/2.d0
+   double precision, parameter   :: third = 1.d0/3.d0
+
+@@ -5989,7 +5989,7 @@ eed_cub, ico, ipairs_sublst, img_iac, cn1, cn2, x_tran)
+
+ ! Local variables:
+
+-  integer, parameter            :: mask27 = Z"07FFFFFF"
++  integer, parameter            :: mask27 = int(Z"07FFFFFF")
+   double precision, parameter   :: half = 1.d0/2.d0
+   double precision, parameter   :: third = 1.d0/3.d0
+
+@@ -6309,7 +6309,7 @@ eed_cub, ico, ipairs_sublst, img_iac, cn1, cn2, x_tran)
+
+ ! Local variables:
+
+-  integer, parameter            :: mask27 = Z"07FFFFFF"
++  integer, parameter            :: mask27 = int(Z"07FFFFFF")
+   double precision, parameter   :: half = 1.d0/2.d0
+   double precision, parameter   :: third = 1.d0/3.d0
+
+@@ -6610,7 +6610,7 @@ eed_cub, ico, ipairs_sublst, img_iac, cn1, cn2, x_tran)
+
+ ! Local variables:
+
+-  integer, parameter            :: mask27 = Z"07FFFFFF"
++  integer, parameter            :: mask27 = int(Z"07FFFFFF")
+   double precision, parameter   :: half = 1.d0/2.d0
+   double precision, parameter   :: third = 1.d0/3.d0
+
+@@ -6895,7 +6895,7 @@ eed_cub, ico, ipairs_sublst, img_iac, cn1, cn2, x_tran)
+
+ ! Local variables:
+
+-  integer, parameter            :: mask27 = Z"07FFFFFF"
++  integer, parameter            :: mask27 = int(Z"07FFFFFF")
+   double precision, parameter   :: half = 1.d0/2.d0
+   double precision, parameter   :: third = 1.d0/3.d0
+
+@@ -7243,7 +7243,7 @@ eed_cub, ico, ipairs_sublst, img_iac, cn1, cn2, x_tran)
+
+ ! Local variables:
+
+-  integer, parameter            :: mask27 = Z"07FFFFFF"
++  integer, parameter            :: mask27 = int(Z"07FFFFFF")
+   double precision, parameter   :: half = 1.d0/2.d0
+   double precision, parameter   :: third = 1.d0/3.d0
+
+@@ -7557,7 +7557,7 @@ eed_cub, ico, ipairs_sublst, img_iac, cn1, cn2, x_tran)
+
+ ! Local variables:
+
+-  integer, parameter            :: mask27 = Z"07FFFFFF"
++  integer, parameter            :: mask27 = int(Z"07FFFFFF")
+   double precision, parameter   :: half = 1.d0/2.d0
+   double precision, parameter   :: third = 1.d0/3.d0
+
+@@ -7852,7 +7852,7 @@ eed_cub, ico, ipairs_sublst, img_iac, cn1, cn2, x_tran)
+
+ ! Local variables:
+
+-  integer, parameter            :: mask27 = Z"07FFFFFF"
++  integer, parameter            :: mask27 = int(Z"07FFFFFF")
+   double precision, parameter   :: half = 1.d0/2.d0
+   double precision, parameter   :: third = 1.d0/3.d0
+
+@@ -8131,7 +8131,7 @@ eed_cub, ico, ipairs_sublst, img_iac, cn1, cn2, x_tran)
+
+ ! Local variables:
+
+-  integer, parameter            :: mask27 = Z"07FFFFFF"
++  integer, parameter            :: mask27 = int(Z"07FFFFFF")
+   double precision, parameter   :: half = 1.d0/2.d0
+   double precision, parameter   :: third = 1.d0/3.d0
+
+@@ -8485,7 +8485,7 @@ eed_cub, ico, ipairs_sublst, img_iac, cn1, cn2, x_tran)
+
+ ! Local variables:
+
+-  integer, parameter            :: mask27 = Z"07FFFFFF"
++  integer, parameter            :: mask27 = int(Z"07FFFFFF")
+   double precision, parameter   :: half = 1.d0/2.d0
+   double precision, parameter   :: third = 1.d0/3.d0
+
+@@ -8805,7 +8805,7 @@ eed_cub, ico, ipairs_sublst, img_iac, cn1, cn2, x_tran)
+
+ ! Local variables:
+
+-  integer, parameter            :: mask27 = Z"07FFFFFF"
++  integer, parameter            :: mask27 = int(Z"07FFFFFF")
+   double precision, parameter   :: half = 1.d0/2.d0
+   double precision, parameter   :: third = 1.d0/3.d0
+
+@@ -9106,7 +9106,7 @@ eed_cub, ico, ipairs_sublst, img_iac, cn1, cn2, x_tran)
+
+ ! Local variables:
+
+-  integer, parameter            :: mask27 = Z"07FFFFFF"
++  integer, parameter            :: mask27 = int(Z"07FFFFFF")
+   double precision, parameter   :: half = 1.d0/2.d0
+   double precision, parameter   :: third = 1.d0/3.d0
+
+@@ -9391,7 +9391,7 @@ eed_cub, ico, ipairs_sublst, img_iac, cn1, cn2, x_tran)
+
+ ! Local variables:
+
+-  integer, parameter            :: mask27 = Z"07FFFFFF"
++  integer, parameter            :: mask27 = int(Z"07FFFFFF")
+   double precision, parameter   :: half = 1.d0/2.d0
+   double precision, parameter   :: third = 1.d0/3.d0
+
+@@ -9697,7 +9697,7 @@ eed_cub, ico, ipairs_sublst, img_iac, cn1, cn2, x_tran)
+
+ ! Local variables:
+
+-  integer, parameter            :: mask27 = Z"07FFFFFF"
++  integer, parameter            :: mask27 = int(Z"07FFFFFF")
+   double precision, parameter   :: half = 1.d0/2.d0
+   double precision, parameter   :: third = 1.d0/3.d0
+
+@@ -9993,7 +9993,7 @@ eed_cub, ico, ipairs_sublst, img_iac, cn1, cn2, x_tran)
+
+ ! Local variables:
+
+-  integer, parameter            :: mask27 = Z"07FFFFFF"
++  integer, parameter            :: mask27 = int(Z"07FFFFFF")
+   double precision, parameter   :: half = 1.d0/2.d0
+   double precision, parameter   :: third = 1.d0/3.d0
+
+@@ -10272,7 +10272,7 @@ eed_cub, ico, ipairs_sublst, img_iac, cn1, cn2, x_tran)
+
+ ! Local variables:
+
+-  integer, parameter            :: mask27 = Z"07FFFFFF"
++  integer, parameter            :: mask27 = int(Z"07FFFFFF")
+   double precision, parameter   :: half = 1.d0/2.d0
+   double precision, parameter   :: third = 1.d0/3.d0
+
+@@ -10535,7 +10535,7 @@ eed_cub, ico, ipairs_sublst, img_iac, cn1, cn2, x_tran)
+
+ ! Local variables:
+
+-  integer, parameter            :: mask27 = Z"07FFFFFF"
++  integer, parameter            :: mask27 = int(Z"07FFFFFF")
+   double precision, parameter   :: half = 1.d0/2.d0
+   double precision, parameter   :: third = 1.d0/3.d0
+
+@@ -10847,7 +10847,7 @@ eed_cub, ico, ipairs_sublst, img_iac, cn1, cn2, x_tran)
+
+ ! Local variables:
+
+-  integer, parameter            :: mask27 = Z"07FFFFFF"
++  integer, parameter            :: mask27 = int(Z"07FFFFFF")
+   double precision, parameter   :: half = 1.d0/2.d0
+   double precision, parameter   :: third = 1.d0/3.d0
+
+@@ -11149,7 +11149,7 @@ eed_cub, ico, ipairs_sublst, img_iac, cn1, cn2, x_tran)
+
+ ! Local variables:
+
+-  integer, parameter            :: mask27 = Z"07FFFFFF"
++  integer, parameter            :: mask27 = int(Z"07FFFFFF")
+   double precision, parameter   :: half = 1.d0/2.d0
+   double precision, parameter   :: third = 1.d0/3.d0
+
+@@ -11434,7 +11434,7 @@ eed_cub, ico, ipairs_sublst, img_iac, cn1, cn2, x_tran)
+
+ ! Local variables:
+
+-  integer, parameter            :: mask27 = Z"07FFFFFF"
++  integer, parameter            :: mask27 = int(Z"07FFFFFF")
+   double precision, parameter   :: half = 1.d0/2.d0
+   double precision, parameter   :: third = 1.d0/3.d0
+
+@@ -11703,7 +11703,7 @@ eed_cub, ico, ipairs_sublst, img_iac, cn1, cn2, x_tran)
+
+ ! Local variables:
+
+-  integer, parameter            :: mask27 = Z"07FFFFFF"
++  integer, parameter            :: mask27 = int(Z"07FFFFFF")
+   double precision, parameter   :: half = 1.d0/2.d0
+   double precision, parameter   :: third = 1.d0/3.d0
+
+@@ -12009,7 +12009,7 @@ eed_cub, ico, ipairs_sublst, img_iac, cn1, cn2, x_tran)
+
+ ! Local variables:
+
+-  integer, parameter            :: mask27 = Z"07FFFFFF"
++  integer, parameter            :: mask27 = int(Z"07FFFFFF")
+   double precision, parameter   :: half = 1.d0/2.d0
+   double precision, parameter   :: third = 1.d0/3.d0
+
+@@ -12305,7 +12305,7 @@ eed_cub, ico, ipairs_sublst, img_iac, cn1, cn2, x_tran)
+
+ ! Local variables:
+
+-  integer, parameter            :: mask27 = Z"07FFFFFF"
++  integer, parameter            :: mask27 = int(Z"07FFFFFF")
+   double precision, parameter   :: half = 1.d0/2.d0
+   double precision, parameter   :: third = 1.d0/3.d0
+
+@@ -12584,7 +12584,7 @@ eed_cub, ico, ipairs_sublst, img_iac, cn1, cn2, x_tran)
+
+ ! Local variables:
+
+-  integer, parameter            :: mask27 = Z"07FFFFFF"
++  integer, parameter            :: mask27 = int(Z"07FFFFFF")
+   double precision, parameter   :: half = 1.d0/2.d0
+   double precision, parameter   :: third = 1.d0/3.d0
+
+@@ -12847,7 +12847,7 @@ eed_cub, ico, ipairs_sublst, img_iac, cn1, cn2, x_tran)
+
+ ! Local variables:
+
+-  integer, parameter            :: mask27 = Z"07FFFFFF"
++  integer, parameter            :: mask27 = int(Z"07FFFFFF")
+   double precision, parameter   :: half = 1.d0/2.d0
+   double precision, parameter   :: third = 1.d0/3.d0
+
+@@ -13159,7 +13159,7 @@ eed_cub, ico, ipairs_sublst, img_iac, cn1, cn2, x_tran)
+
+ ! Local variables:
+
+-  integer, parameter            :: mask27 = Z"07FFFFFF"
++  integer, parameter            :: mask27 = int(Z"07FFFFFF")
+   double precision, parameter   :: half = 1.d0/2.d0
+   double precision, parameter   :: third = 1.d0/3.d0
+
+@@ -13461,7 +13461,7 @@ eed_cub, ico, ipairs_sublst, img_iac, cn1, cn2, x_tran)
+
+ ! Local variables:
+
+-  integer, parameter            :: mask27 = Z"07FFFFFF"
++  integer, parameter            :: mask27 = int(Z"07FFFFFF")
+   double precision, parameter   :: half = 1.d0/2.d0
+   double precision, parameter   :: third = 1.d0/3.d0
+
+@@ -13746,7 +13746,7 @@ eed_cub, ico, ipairs_sublst, img_iac, cn1, cn2, x_tran)
+
+ ! Local variables:
+
+-  integer, parameter            :: mask27 = Z"07FFFFFF"
++  integer, parameter            :: mask27 = int(Z"07FFFFFF")
+   double precision, parameter   :: half = 1.d0/2.d0
+   double precision, parameter   :: third = 1.d0/3.d0
+
+diff --git a/src/pmemd/src/ti_code2.py b/src/pmemd/src/ti_code2.py
+--- a/src/pmemd/src/ti_code2.py
++++ b/src/pmemd/src/ti_code2.py
+@@ -189,7 +189,7 @@ for f_pair_idx in xrange(0,len(pair)):
+
+ ! Local variables:
+
+-  integer, parameter            :: mask27 = Z"07FFFFFF"
++  integer, parameter            :: mask27 = int(Z"07FFFFFF")
+   double precision, parameter   :: half = 1.d0/2.d0
+   double precision, parameter   :: third = 1.d0/3.d0
