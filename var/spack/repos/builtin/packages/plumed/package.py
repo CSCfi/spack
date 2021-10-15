@@ -25,9 +25,14 @@ class Plumed(AutotoolsPackage):
     git = 'https://github.com/plumed/plumed2.git'
 
     version('master', branch='master')
+    version('2.7.2', preferred=True, sha256='c9a31e68d6440828cf186ca43c9e11a5e5c7ad1c96b2b66ed5a5a141fc954373')
+    version('2.7.1', sha256='cb8b5735d8dd61980fa6441f3dde3f33544240ae4177da0f529fb5abb355cd4a')
+    version('2.7.0', sha256='14450ea566c25ac9bf71fd77bb9c0c95e9038462b5739c73a515be82e2011cd6')
+    version('2.6.4', sha256='53e49c0db6cc769d238834bea884e856f4e7bb8f71c9929e5584bd977113f03b')
+    version('2.6.3', sha256='d05b9e4a4c1329fc932d5bdd04f20419be230f98159bdc012a91716461ab4a2f')
     version('2.6.1', sha256='c1b3c397b2d971140aa240dde50e48a04ce78e3dedb02b6dca80fa53f8026e4e')
     version('2.6.0', sha256='3d57ae460607a49547ef38a52c4ac93493a3966857c352280a9c05f5dcdb1820')
-    version('2.5.5', preferred=True, sha256='70faa9ff1938e286dc388cb793b39840953e5646855b684f48df1bc864b737e8')
+    version('2.5.5', sha256='70faa9ff1938e286dc388cb793b39840953e5646855b684f48df1bc864b737e8')
     version('2.5.4', sha256='a1647e598191f261e75d06351e607475d395af481315052a4c28563ac9989a7f')
     version('2.5.3', sha256='543288be667dc4201fc461ecd2dd4878ddfbeac682d0c021c99ea8e501c7c9dc')
     version('2.5.2', sha256='85d10cc46e2e37c7719cf51c0931278f56c2c8f8a9d86188b2bf97c2535a2ab4')
@@ -96,14 +101,15 @@ class Plumed(AutotoolsPackage):
         out = plumed_patch('-q', '-l', output=str)
         available = out.split(':')[-1].split()
 
+        # FIX ME: this version check may be too strict for gromacs
         # Check that `other` is among the patchable applications
-        if get_md(other) not in available:
-            msg = '{0.name}@{0.version} is not among the MD engine'
-            msg += ' that can be patched by {1.name}@{1.version}.\n'
-            msg += 'Supported engines are:\n'
-            for x in available:
-                msg += x + '\n'
-            raise RuntimeError(msg.format(other, self.spec))
+        # if get_md(other) not in available:
+        #     msg = '{0.name}@{0.version} is not among the MD engine'
+        #     msg += ' that can be patched by {1.name}@{1.version}.\n'
+        #     msg += 'Supported engines are:\n'
+        #     for x in available:
+        #         msg += x + '\n'
+        #     raise RuntimeError(msg.format(other, self.spec))
 
         # Call plumed-patch to patch executables
         target = format_strings[other.name].format(other)
