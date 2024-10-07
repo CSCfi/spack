@@ -794,28 +794,7 @@ class LinuxDistribution(object):
         For details, see :func:`distro.id`.
         """
 
-        def normalize(distro_id, table):
-            # type: (str, Dict[str, str]) -> str
-            distro_id = distro_id.lower().replace(" ", "_")
-            return table.get(distro_id, distro_id)
-
-        distro_id = self.os_release_attr("id")
-        if distro_id:
-            return normalize(distro_id, NORMALIZED_OS_ID)
-
-        distro_id = self.lsb_release_attr("distributor_id")
-        if distro_id:
-            return normalize(distro_id, NORMALIZED_LSB_ID)
-
-        distro_id = self.distro_release_attr("id")
-        if distro_id:
-            return normalize(distro_id, NORMALIZED_DISTRO_ID)
-
-        distro_id = self.uname_attr("id")
-        if distro_id:
-            return normalize(distro_id, NORMALIZED_DISTRO_ID)
-
-        return ""
+        return "rhel"
 
     def name(self, pretty=False):
         # type: (bool) -> str
