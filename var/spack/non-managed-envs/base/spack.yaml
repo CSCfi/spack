@@ -1,0 +1,52 @@
+# This is a Spack Environment file.
+#
+# It describes a set of packages to be installed, along with
+# configuration settings.
+spack:
+  # add package specs to the `specs` list
+  specs:
+  - bzip2
+  - cmake
+  - dos2unix
+  - emacs
+  - gcc
+  - git
+  - git-lfs
+  - gnuplot
+  - go
+  - htop
+  - mc
+  - nano
+  - parallel
+  - p7zip
+  - pdsh
+  - perl
+  - perl-alien-svn
+  - rsync
+  - screen
+  - subversion
+  - tar
+  - tmux
+  - vim
+  - zstd
+  view: false
+  concretizer:
+    unify: true
+  packages:
+    all:
+      compiler: [gcc@8.5.0]
+      target: [x86_64_v3]
+    emacs:
+      variants: +tls
+    gcc:
+      variants: +binutils +graphite +strip languages=c,c++,fortran,jit
+    git:
+      variants: +svn
+    gnuplot:
+      variants: +X
+    python:
+      variants: +ssl
+    subversion:
+      variants: +perl
+    zstd:
+      variants: +programs

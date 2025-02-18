@@ -1,0 +1,44 @@
+# This is a Spack Environment file.
+#
+# It describes a set of packages to be installed, along with
+# configuration settings.
+spack:
+  # add package specs to the `specs` list
+  specs:
+  - boost%oneapi@2022.1.0
+  - fftw%oneapi@2022.1.0 ^intel-oneapi-mpi
+  - hdf5%oneapi@2022.1.0 ^intel-oneapi-mpi
+  - parallel-netcdf%oneapi@2022.1.0 ^intel-oneapi-mpi
+  - mumps%oneapi@2022.1.0 ^intel-oneapi-mkl ^intel-oneapi-mpi
+  - netcdf-c%oneapi@2022.1.0
+  - netcdf-fortran%oneapi@2022.1.0
+  view: false
+  packages:
+    all:
+      compiler: [oneapi@2022.1.0]
+      target: [cascadelake]
+      providers:
+        mpi: [intel-oneapi-mpi]
+        blas: [intel-oneapi-mkl]
+        lapack: [intel-oneapi-mkl]
+        scalapack: [intel-oneapi-mkl]
+    boost:
+      variants: +context+container+coroutine+fibber+icu+mpi cxxstd=17
+    cdo:
+      variants: +curl
+    eccodes:
+      variants: +aec+fortran+memfs+netcdf+openmp+png~pthreads~python jp2k=jasper build_type=Release
+    fftw:
+      variants: +mpi
+    hdf:
+      variants: ~external-xdr+shared+szip
+    hdf5:
+      variants: +threadsafe+szip+fortran+cxx+hl+mpi+tools
+    mumps:
+      variants: +ptscotch
+    netcdf-c:
+      variants: +dap~fsync+hdf4~jna+mpi+parallel-netcdf+pic+shared
+    python:
+      variants: +tls
+  concretizer:
+    unify: when_possible

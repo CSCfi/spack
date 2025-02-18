@@ -1,0 +1,25 @@
+# This is a Spack Environment file.
+#
+# It describes a set of packages to be installed, along with
+# configuration settings.
+spack:
+  # add package specs to the `specs` list
+  specs:
+    - matrix:
+        - [blitz, boost, bzip2, gsl, intel-oneapi-mkl, jasper, metis, openssl, zstd]
+        - ['intel@2021.6.0', 'oneapi@2022.1.0']
+  view: false
+  concretizer:
+    unify: when_possible
+  packages:
+    all:
+      target: [linux-rhel8-cascadelake]
+    boost:
+      variants: +atomic+chrono+context+container+coroutine+date_time+exception+fibber+graph+locale+log+math+multithread+program_options+random+regex+serialization+shared+signals+system+thread+timer+wave+icu~mpi
+        cxxstd=17
+    cgal:
+      variants: +core
+    gsl:
+      variants: +external-cblas
+    jasper:
+      variants: +jpeg~opengl+shared build_type=Release

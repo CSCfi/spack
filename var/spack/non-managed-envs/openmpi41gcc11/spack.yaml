@@ -1,0 +1,54 @@
+# This is a Spack Environment file.
+#
+# It describes a set of packages to be installed, along with
+# configuration settings.
+spack:
+  # add package specs to the `specs` list
+  specs:
+  - boost%gcc@11.3.0
+  - cdo%gcc@11.3.0
+  - openmpi%gcc@11.3.0
+  - eccodes +aec+fortran~memfs+netcdf+openmp+png~pthreads~python+tools jp2k=jasper
+    build_type=Release
+  - fftw%gcc@11.3.0
+  - hdf5%gcc@11.3.0
+  - parallel-netcdf%gcc@11.3.0
+  - mumps%gcc@11.3.0 ^intel-oneapi-mkl
+  - netcdf-c%gcc@11.3.0
+  - netcdf-fortran%gcc@11.3.0
+  - netlib-scalapack%gcc@11.3.0 ^intel-oneapi-mkl
+  - scalasca%gcc@11.3.0
+  view: false
+  packages:
+    all:
+      compiler: [gcc@11.3.0]
+      target: [cascadelake]
+      providers:
+        blas: [intel-oneapi-mkl]
+        lapack: [intel-oneapi-mkl]
+        scalapack: [netlib-scalapack]
+    boost:
+      variants: +context+container+coroutine+fibber+icu+mpi cxxstd=17
+    cdo:
+      variants: +curl
+    eccodes:
+      variants: +aec+fortran+memfs+netcdf+openmp+png~pthreads~python+tools jp2k=jasper
+        build_type=Release
+    fftw:
+      variants: +mpi
+    hdf:
+      variants: ~external-xdr+shared+szip
+    hdf5:
+      variants: +threadsafe+szip+fortran+cxx+hl+mpi+tools
+    mumps:
+      variants: +ptscotch
+    netcdf-c:
+      variants: +dap~fsync+hdf4~jna+mpi+parallel-netcdf+pic+shared
+    netlib-scalapack:
+      variants: +pic
+    openmpi:
+      variants: fabrics=ucx schedulers=slurm +sys_libevent+lustre+pmix~gpfs~static+thread_multiple
+    python:
+      variants: +tls
+  concretizer:
+    unify: when_possible

@@ -1,0 +1,27 @@
+# This is a Spack Environment file.
+#
+# It describes a set of packages to be installed, along with
+# configuration settings.
+spack:
+  # add package specs to the `specs` list
+  specs:
+  - ncl%gcc@8.5.0
+  - nco%gcc@8.5.0
+  - ncview%gcc@8.5.0
+  - makedepf90%gcc@8.5.0
+  - gsl%gcc@8.5.0 ^intel-oneapi-mkl
+  view: false
+  concretizer:
+    unify: true
+  packages:
+    all:
+      compiler: [gcc@8.5.0]
+      target: [x86_64_v3]
+    esmf:
+      variants: ~mpi ~pio ~pnetcdf
+    gsl:
+      variants: +external-cblas
+    netcdf-c:
+      variants: ~mpi
+    hdf5:
+      variants: ~mpi+szip+hl+fortran

@@ -513,3 +513,6 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+
+var/spack/non-managed-envs/**/.spack-env
+var/spack/non-managed-envs/**/spack.lock

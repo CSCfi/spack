@@ -1,0 +1,15 @@
+# This is a Spack Environment file.
+#
+# It describes a set of packages to be installed, along with
+# configuration settings.
+spack:
+  # add package specs to the `specs` list
+  specs:
+    - python@3.9.12%gcc@11.3.0 +tkinter
+    - py-numpy@1.22.4%gcc@11.3.0 ^intel-oneapi-mkl
+  view: /appl/spack/v018/views/gpaw-python
+  concretizer:
+    unify: when_possible
+  packages:
+    all:
+      target: [linux-rhel8-cascadelake]
