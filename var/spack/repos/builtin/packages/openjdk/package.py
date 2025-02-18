@@ -17,6 +17,9 @@ from spack.util.prefix import Prefix
 #    format returned by platform.system() and 'arch' by platform.machine()
 
 _versions = {
+    '17.0.13_11': {
+        'Linux-x86_64': ('8682892fc02965930b9022c066fa164dd6f458ef4a5dc262016aa28333b30f49', 'https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.13%2B11/OpenJDK17U-jdk_x64_linux_hotspot_17.0.13_11.tar.gz'),
+    },
     '17.0.3_7': {
         'Linux-x86_64': ('81f5bed21077f9fbb04909b50391620c78b9a3c376593c0992934719c0de6b73', 'https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.3%2B7/OpenJDK17U-jdk_x64_linux_hotspot_17.0.3_7.tar.gz'),
         'Linux-aarch64': ('2e3c19c1707205c6b90cc04b416e8d83078ed98417d5a69dce3cf7dc0d7cfbca', 'https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.3%2B7/OpenJDK17U-jdk_aarch64_linux_hotspot_17.0.3_7.tar.gz'),
