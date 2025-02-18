@@ -18,6 +18,9 @@ class Hyperqueue(Package):
 
     version("main", branch="main")
     version(
+        "0.15.0", sha256="0c7b5d567bb6cb8dd4e7bafdf784b0379cef74b3aecb958c7f20248f8fedfbc1"
+    )
+    version(
         "0.12.0-rc1", sha256="0c7b5d567bb6cb8dd4e7bafdf784b0379cef74b3aecb958c7f20248f8fedfbc1"
     )
     version(
