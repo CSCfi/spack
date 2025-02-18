@@ -96,6 +96,7 @@ class Hipfft(CMakePackage, CudaPackage, ROCmPackage):
     depends_on("cmake@3.5:", type="build")
 
     depends_on("hip +cuda", when="+cuda")
+    depends_on("cuda", when="+cuda")
 
     for ver in [
         "4.1.0",

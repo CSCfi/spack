@@ -35,6 +35,7 @@ class Gcc(AutotoolsPackage, GNUMirrorPackage):
 
     version("master", branch="master")
 
+    version("14.0.1", commit="62a0ef0d02cbb74cd865c1db2ecb7ca1b11f87cd")
     version("13.2.0", sha256="e275e76442a6067341a27f04c5c6b83d8613144004c0413528863dc6b5c743da")
     version("13.1.0", sha256="61d684f0aa5e76ac6585ad8898a2427aade8979ed5e7f85492286c4dfc13ee86")
 
@@ -302,8 +303,8 @@ class Gcc(AutotoolsPackage, GNUMirrorPackage):
         depends_on("cuda")
         resource(
             name="newlib",
-            url="ftp://sourceware.org/pub/newlib/newlib-3.0.0.20180831.tar.gz",
-            sha256="3ad3664f227357df15ff34e954bfd9f501009a647667cd307bf0658aefd6eb5b",
+            url="ftp://sourceware.org/pub/newlib/newlib-4.4.0.20231231.tar.gz",
+            sha256="0c166a39e1bf0951dfafcd68949fe0e4b6d3658081d6282f39aeefc6310f2f13",
             destination="newlibsource",
             fetch_options=timeout,
         )
@@ -313,7 +314,7 @@ class Gcc(AutotoolsPackage, GNUMirrorPackage):
         resource(
             name="nvptx-tools",
             git="https://github.com/MentorEmbedded/nvptx-tools",
-            commit="d0524fbdc86dfca068db5a21cc78ac255b335be5",
+            commit="c5ad8ada3e86d96b10a9d352b7a764f801478ba6",
         )
         # NVPTX offloading supported in 7 and later by limited languages
         conflicts("@:6", msg="NVPTX only supported in gcc 7 and above")
