@@ -30,6 +30,7 @@ class Gromacs(CMakePackage, CudaPackage):
 
     version("main", branch="main")
     version("master", branch="main", deprecated=True)
+    version("2025.1", sha256="0adf621a80fd8043f8defec84ce02811c0cdf42a052232890932d81f25c4d28a")
     version("2024.4", sha256="ac618ece2e58afa86b536c5a2c4fcb937f0760318f12d18f10346b6bdebd86a8")
     version("2024.3", sha256="bbda056ee59390be7d58d84c13a9ec0d4e3635617adf2eb747034922cba1f029")
     version("2024.2", sha256="802a7e335f2e895770f57b159e4ec368ebb0ff2ce6daccf706c6e8025c36852b")
@@ -245,6 +246,7 @@ class Gromacs(CMakePackage, CudaPackage):
     depends_on("cmake@3.9.6:3", type="build", when="@2020")
     depends_on("cmake@3.13.0:3", type="build", when="@2021")
     depends_on("cmake@3.16.3:3", type="build", when="@2022:")
+    depends_on("cmake@3.28.0:3", type="build", when="@2025:")
     depends_on("cmake@3.18.4:3", type="build", when="@main")
     depends_on("cmake@3.16.0:3", type="build", when="%fj")
     depends_on("cuda", when="+cuda")
