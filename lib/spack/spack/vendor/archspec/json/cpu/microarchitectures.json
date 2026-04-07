@@ -2440,7 +2440,6 @@
         "pclmulqdq",
         "popcnt",
         "pku",
-        "rdseed",
         "sse",
         "sse2",
         "sse4_1",
